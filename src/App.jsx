@@ -7,6 +7,9 @@ import HindustanTimes from "./pages/HindustanTimes";
 import TheHindu from "./pages/TheHindu";
 import TimesNow from "./pages/TimesNow";
 import TimesOfIndia from "./pages/TimesOfIndia";
+import SearchResults from "./pages/SearchResults";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./auth/ProtectedRoute";
 function App() {
   return (
     <>
@@ -14,11 +17,48 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/bbc" element={<BBC />} />
-          <Route path="/hindustantimes" element={<HindustanTimes />} />
-          <Route path="/thehindu" element={<TheHindu />} />
-          <Route path="/timesnow" element={<TimesNow />} />
-          <Route path="/timesofindia" element={<TimesOfIndia />} />
+          <Route path="/search/:query" element={<SearchResults />} />
+          <Route
+            path="/bbc"
+            element={
+              <ProtectedRoute>
+                <BBC />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/hindustantimes"
+            element={
+              <ProtectedRoute>
+                <HindustanTimes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/thehindu"
+            element={
+              <ProtectedRoute>
+                <TheHindu />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/timesnow"
+            element={
+              <ProtectedRoute>
+                <TimesNow />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/timesofindia"
+            element={
+              <ProtectedRoute>
+                <TimesOfIndia />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
