@@ -1,7 +1,7 @@
 import React from "react";
 
 const Home = () => {
-  return <div></div>;
+  return <div>Home/ Times of India</div>;
 };
 
 export default Home;
