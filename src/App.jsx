@@ -2,62 +2,53 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import BBC from "./pages/BBC";
-import HindustanTimes from "./pages/HindustanTimes";
-import TheHindu from "./pages/TheHindu";
-import TimesNow from "./pages/TimesNow";
-import TimesOfIndia from "./pages/TimesOfIndia";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./auth/ProtectedRoute";
 import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./auth/ProtectedRoute";
+import Category from "./components/Category";
+import CategoryPage from "./pages/CategoryPage";
+import TopNews from "./components/TopNews";
+import SourceNews from "./pages/SourceNews";
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <Navbar />
+        <Category />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <TopNews /> <Home />
+              </>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/search/:query" element={<SearchResults />} />
           <Route
-            path="/bbc"
+            path="/category/:category"
             element={
               <ProtectedRoute>
-                <BBC />
+                <CategoryPage />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/hindustantimes"
+            path="/source/:source"
             element={
               <ProtectedRoute>
-                <HindustanTimes />
+                <SourceNews />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/thehindu"
-            element={
-              <ProtectedRoute>
-                <TheHindu />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/timesnow"
-            element={
-              <ProtectedRoute>
-                <TimesNow />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/timesofindia"
-            element={
-              <ProtectedRoute>
-                <TimesOfIndia />
-              </ProtectedRoute>
-            }
-          />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

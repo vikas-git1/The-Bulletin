@@ -7,12 +7,12 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAXBr5pJwAA67pPUDN2loQkZhEfPPd7Kmk",
-  authDomain: "the-bulletin-auth.firebaseapp.com",
-  projectId: "the-bulletin-auth",
-  storageBucket: "the-bulletin-auth.firebasestorage.app",
-  messagingSenderId: "141822362339",
-  appId: "1:141822362339:web:837545513a27cb17ee3bd6",
+  apiKey: "AIzaSyCeNrwGulWtqErCs6Lq9FM2Nn-u-I1vmdI",
+  authDomain: "bulletin-auth.firebaseapp.com",
+  projectId: "bulletin-auth",
+  storageBucket: "bulletin-auth.firebasestorage.app",
+  messagingSenderId: "481019100676",
+  appId: "1:481019100676:web:d1e47e0fef918ef18abf51",
 };
 
 // Initialize Firebase

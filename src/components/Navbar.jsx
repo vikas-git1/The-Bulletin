@@ -1,113 +1,136 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaBars, FaTimes, FaUser, FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext, useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
   const { user } = useAuth();
-  console.log(user);
+  const { userProfile } = useContext(AuthContext);
 
   const newsItems = [
-    {
-      id: 1,
-      newsName: "HindustanTimes",
-      path: "/hindustantimes",
-    },
-    {
-      id: 2,
-      newsName: "The Hindu",
-      path: "/thehindu",
-    },
-    {
-      id: 3,
-      newsName: "BBC",
-      path: "/bbc",
-    },
-    {
-      id: 4,
-      newsName: "Times Now",
-      path: "/timesnow",
-    },
-    {
-      id: 5,
-      newsName: "Times Of India",
-      path: "timesofindia",
-    },
+    { id: 1, newsName: "Fox News", path: "fox-news" },
+    { id: 2, newsName: "The Hindu", path: "the-hindu" },
+    { id: 3, newsName: "BBC", path: "bbc-news" },
+    { id: 4, newsName: "The Verge", path: "the-verge" },
+    { id: 5, newsName: "Times Of India", path: "the-times-of-india" },
   ];
-  return (
-    <nav className="bg-white shadow-md px-4 py-3">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <div className="text-xl font-bold cursor-pointer">
-          <Link to={"/"}>MyLogo</Link>
-        </div>
 
-        {/* Center NavLinks */}
-        <ul className="hidden md:flex space-x-6 text-gray-700 font-medium">
-          {newsItems.map((item) => {
-            return (
-              <li key={item.id}>
-                <Link to={item.path}>{item.newsName}</Link>
-              </li>
-            );
-          })}
+  const handleSearch = () => {
+    navigate(`/search/${query}`);
+    setQuery("");
+  };
+
+  const handleLogin = () => navigate("/login");
+  const handleUserProfile = () => navigate("/profile");
+
+  return (
+    <nav className="bg-white shadow sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <Link to="/" className="text-xl font-bold text-blue-700">
+          NewsNow
+        </Link>
+
+        <ul className="hidden md:flex gap-6 text-gray-700 font-medium">
+          {newsItems.map((item) => (
+            <li
+              key={item.id}
+              onClick={() => navigate(`/source/${item.path}`)}
+              className="cursor-pointer hover:text-blue-600"
+            >
+              {item.newsName}
+            </li>
+          ))}
         </ul>
 
-        {/* Right Section */}
-        <div className="hidden md:flex items-center space-x-4">
-          <div className="flex border rounded-lg overflow-hidden">
+        <div className="hidden md:flex items-center gap-4">
+          <div className="flex border rounded-md overflow-hidden">
             <input
               type="text"
               placeholder="Search..."
               className="px-3 py-1 outline-none"
+              onChange={(e) => setQuery(e.target.value)}
             />
-            <button className="bg-blue-600 text-white px-3 flex items-center ">
-              <FaSearch className="cursor-pointer" />
+            <button
+              className="bg-blue-600 text-white px-3"
+              onClick={handleSearch}
+            >
+              <FaSearch />
             </button>
           </div>
-          <FaUser className="text-gray-600  w-5 h-5 cursor-pointer" />
-          <span className="text-gray-700">Hello, Vikas</span>
+          {user ? (
+            <div
+              onClick={handleUserProfile}
+              className="flex items-center cursor-pointer gap-2"
+            >
+              <FaUser className="text-gray-600" />
+              <span className="text-sm font-medium">
+                Hello, {userProfile.firstName}
+              </span>
+            </div>
+          ) : (
+            <button
+              onClick={handleLogin}
+              className="text-sm px-3 py-1 rounded-md bg-blue-600 text-white"
+            >
+              Login
+            </button>
+          )}
         </div>
 
-        {/* Mobile Toggle Button */}
         <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? (
-            <FaTimes className="w-5 h-5" />
-          ) : (
-            <FaBars className="w-5 h-5" />
-          )}
+          {isOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden mt-2 space-y-3 px-2 pb-3">
-          <ul className="space-y-2">
-            {newsItems.map((item) => {
-              return (
-                <li key={item.id}>
-                  <Link to={item.path}>{item.newsName}</Link>
-                </li>
-              );
-            })}
+        <div className="md:hidden px-4 pb-4 space-y-4">
+          <ul className="flex flex-col gap-2">
+            {newsItems.map((item) => (
+              <li
+                key={item.id}
+                onClick={() => {
+                  navigate(`/source/${item.path}`);
+                  setIsOpen(false);
+                }}
+                className="text-gray-700 font-medium cursor-pointer hover:text-blue-600"
+              >
+                {item.newsName}
+              </li>
+            ))}
           </ul>
-          <div className="mt-3">
-            <div className="flex border rounded-lg overflow-hidden mb-2">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="px-3 py-1 w-full outline-none"
-              />
-              <button className="bg-blue-600 text-white px-3 flex items-center cursor-poiter">
-                <FaSearch />
-              </button>
-            </div>
-            <div className="flex items-center space-x-2">
-              <FaUser className="w-4 h-4 text-gray-600 cursor-pointer" />
-              <span>Hello, Vikas</span>
-            </div>
+          <div className="flex border rounded-md overflow-hidden">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full px-3 py-1 outline-none"
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button
+              className="bg-blue-600 text-white px-3"
+              onClick={handleSearch}
+            >
+              <FaSearch />
+            </button>
           </div>
+          {user ? (
+            <div
+              onClick={handleUserProfile}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <FaUser className="text-gray-600" />
+              <span>Hello, {userProfile.firstName}</span>
+            </div>
+          ) : (
+            <button
+              onClick={handleLogin}
+              className="text-sm px-3 py-1 rounded-md bg-blue-600 text-white"
+            >
+              Login
+            </button>
+          )}
         </div>
       )}
     </nav>
